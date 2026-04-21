@@ -59,7 +59,7 @@
 		public $summit;
 		
 		public $mountainForecast;
-		public $noaaForecast;
+		public $roamWeather;
 		public $weatherTable;
 		
 		public function __construct($post) {
@@ -117,14 +117,14 @@
 			$this->summit = getMeta($post, "summit", "Summit", $this->parentPost);
 			
 			$this->mountainForecast = getMeta($post, "mountain_forecast", "Mountain Forecast", $this->parentPost);
-			$this->noaaForecast = new Meta("noaa_forecast", "NOAA Forecast", "");
+			$this->roamWeather = new Meta("roam_weather", "Roam Weather", "");
 			if ($this->summit->hasValue()) {
-				$this->noaaForecast->value = "https://forecast.weather.gov/MapClick.php?lat=".trim($this->summit->value["lat"])."&lon=".trim($this->summit->value["lng"]);
+				$this->roamWeather->value = "https://weather.roamapps.com/forecast/".trim($this->summit->value["lat"])."/".trim($this->summit->value["lng"])."?name=".urlencode($post->post_title)."&profile=default-1";
 			}
 			
 			$this->weatherTable = $this->cleanTable([
 				$this->mountainForecast,
-				$this->noaaForecast
+				$this->roamWeather
 			]);
 			
 			foreach ($this->weatherTable as $weatherRow) {
